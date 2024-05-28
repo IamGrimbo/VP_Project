@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="../CSS/store.css">
+    <link rel="stylesheet" href="../CSS/topbar.css">
+</head>
+<body>
+    <!-- Import Topbar -->
+    <div class="topbar-container">
+        <!-- Topbar will be imported here -->
+    </div>
+
+    <!-- Page Content -->
+    <div class="content">
+        <!-- You can add page content here -->
+        <h1>Welcome to My Website!</h1>
+        <p>This is the home page.</p>
+    </div>
+
+    <script>
+        // JavaScript to import topbar.html into topbar-container div
+        fetch('../HTML/topbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.topbar-container').innerHTML = html;
+            });
+    </script>
+</body>
+</html>

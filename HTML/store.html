@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Store</title>
+    <link rel="stylesheet" href="../CSS/store.css">
+    <link rel="stylesheet" href="../CSS/topbar.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Topbar -->
+    <div class="topbar-container">
+        <!-- Topbar will be imported here -->
+    </div>
+    <!-- Sorting Bar -->
+    <div class="sorting-bar">
+        <button id="all-items-btn">ALL ITEMS</button>
+        <button id="top-rated-btn">TOP RATED</button>
+        <button id="discounted-btn">DISCOUNTED</button>
+    </div>
+
+    <!-- Game List -->
+    <div class="game-list">
+        <!-- Game items will be rendered here -->
+    </div>
+
+    <!-- Page Content -->
+    <div class="content">
+        <div class="container">
+            <div id="game-grid" class="grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to import topbar.html into topbar-container div
+        fetch('../HTML/topbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.topbar-container').innerHTML = html;
+            });
+    </script>
+
+    <script src="../JS/store.js"></script>
+</body>
+</html>

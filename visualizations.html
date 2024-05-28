@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizations</title>
+    <link rel="stylesheet" href="../CSS/visualizations.css">
+    <link rel="stylesheet" href="../CSS/topbar.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../JS/visualizations.js" defer></script>
+</head>
+<body>
+    <!-- Import Topbar -->
+    <div class="topbar-container">
+        <!-- Topbar will be imported here -->
+    </div>
+
+    <div class="container">
+        <h1>Game Visualizations</h1>
+        <div class="controls">
+            <select id="visualizationType">
+                <option value="genres">Genres</option>
+                <option value="tags">Tags</option>
+                <option value="categories">Categories</option>
+                <option value="os">Operating Systems</option>
+                <option value="release_dates">Release Dates</option>
+            </select>
+
+            <div id="chartTypeContainer">
+                <select id="chartType">
+                    <option value="bar">Bar Chart</option>
+                    <option value="pie">Pie Chart</option>
+                </select>
+            </div>
+
+            <div class="controls-row">
+                <div id="yearContainer" style="display: none;">
+                    <select id="year">
+                        <option value="">All Years</option>
+                        <!-- Generate years dynamically -->
+                        <script>
+                            for (let year = 2010; year <= 2022; year++) {
+                                document.write(`<option value="${year}">${year}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+
+                <div id="monthContainer" style="display: none;">
+                    <select id="month">
+                        <option value="">All Months</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="generateChart">Generate Chart</button>
+        </div>
+        <div class="chart-container">
+            <canvas id="chartCanvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to import topbar.html into topbar-container div
+        fetch('../HTML/topbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.topbar-container').innerHTML = html;
+            });
+    </script>
+</body>
+</html>

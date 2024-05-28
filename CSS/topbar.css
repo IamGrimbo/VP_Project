@@ -1,0 +1,41 @@
+.topbar {
+    z-index: 10000;
+    height: 50px;
+    width: 80%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-x: auto;
+    padding-left: 10%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+
+.topbar ul {
+    background-color: #2c3037;
+    border-radius: 20px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Align items in the center */
+}
+
+.topbar ul li {
+    padding: 5px 20px; /* Add padding to each list item */
+}
+
+.topbar ul li a {
+    color: black;
+    text-decoration: none;
+    padding: 0; /* Remove padding */
+    display: flex; /* Use flexbox */
+    align-items: center; /* Vertically center text */
+    justify-content: center; /* Horizontally center text */
+    font-size: 2em;
+    text-shadow: 2px 2px 4px #fff; /* Add text shadow */
+}
+
+.topbar ul li a:hover {
+    color: #555;
+    text-shadow: 2px 2px 4px #fff; /* Add text shadow */
+}

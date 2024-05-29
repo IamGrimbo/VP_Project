@@ -23,6 +23,8 @@
                 <option value="categories">Categories</option>
                 <option value="os">Operating Systems</option>
                 <option value="release_dates">Release Dates</option>
+                <option value="user_reviews_positive_ratio">Reviews/Ratio</option>
+                <option value="user_reviews_price">Reviews/Price</option>
             </select>
 
             <div id="chartTypeContainer">
@@ -60,6 +62,39 @@
                         <option value="10">October</option>
                         <option value="11">November</option>
                         <option value="12">December</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div id="userReviewsContainer" style="display: none;">
+                <select id="reviewThreshold">
+                    <option value="1000">Under 1000 Reviews</option>
+                    <option value="10000">Under 10000 Reviews</option>
+                    <option value="100000">Under 100000 Reviews</option>
+                    <option value="1000000">Under 1000000 Reviews</option>
+                </select>
+            </div>
+
+            <div class="controls-row">
+                <div id="usersPriceContainer" style="display: none;">
+                    <select id="usersPriceThreshold">
+                        <option value="1000">Under 1000 Reviews</option>
+                        <option value="10000">Under 10000 Reviews</option>
+                        <option value="100000">Under 100000 Reviews</option>
+                        <option value="1000000">Under 1000000 Reviews</option>
+                    </select>
+                </div>
+
+                <div id="priceUsersContainer" style="display: none;">
+                    <select id="priceUsersThreshold">
+                        <option value="1000">All Prices</option>
+                        <option value="60">Under 60€</option>
+                        <option value="50">Under 50€</option>
+                        <option value="40">Under 40€</option>
+                        <option value="30">Under 30€</option>
+                        <option value="20">Under 20€</option>
+                        <option value="10">Under 10€</option>
                     </select>
                 </div>
             </div>

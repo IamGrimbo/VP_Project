@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const options = {
                     responsive: true,
+                    color: 'red',
                     maintainAspectRatio: false,
                     onClick: (event, elements) => {
                         if (elements.length > 0) {
@@ -166,17 +167,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             beginAtZero: true,
                             ticks: {
                                 stepSize: 1,
+                                color: 'red',
                                 callback: function (value) { return value; }
                             },
                             title: {
                                 display: true,
+                                color: 'red',
                                 text: 'Count'
                             }
                         },
                         x: {
                             title: {
                                 display: true,
+                                color: 'red',
                                 text: visualizationType.charAt(0).toUpperCase() + visualizationType.slice(1)
+                            },
+                            ticks: {
+                                color: 'red',
                             }
                         }
                     }
@@ -232,8 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     label: `Games released in ${getMonthName(month)} of ${year}`,
                     data: values,
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(255, 0, 0, 1)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
                     borderWidth: 1,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: 'rgba(255, 99, 0, 1)',
+                    pointBorderColor: 'rgba(255, 99, 0, 1)',
                     fill: false,
                     tension: 0.1
                 }]
@@ -242,22 +254,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const options = {
                 responsive: true,
                 maintainAspectRatio: false,
+                color: 'red',
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
                             stepSize: 1,
+                            color: 'red',
                             callback: function (value) { return value; }
                         },
                         title: {
                             display: true,
+                            color: 'red',
                             text: 'Count'
                         }
                     },
                     x: {
                         title: {
                             display: true,
+                            color: 'red',
                             text: 'Day of the Month'
+                        },
+                        ticks: {
+                            color: 'red',
                         }
                     }
                 },
@@ -290,8 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     label: `Games released in ${year}`,
                     data: values,
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(255, 0, 0, 1)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
                     borderWidth: 1,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: 'rgba(255, 99, 0, 1)',
+                    pointBorderColor: 'rgba(255, 99, 0, 1)',
                     fill: false,
                     tension: 0.1
                 }]
@@ -300,22 +324,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const options = {
                 responsive: true,
                 maintainAspectRatio: false,
+                color: 'red',
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
                             stepSize: 1,
+                            color: 'red',
                             callback: function (value) { return value; }
                         },
                         title: {
                             display: true,
+                            color: 'red',
                             text: 'Count'
                         }
                     },
                     x: {
                         title: {
                             display: true,
+                            color: 'red',
                             text: 'Month'
+                        },
+                        ticks: {
+                            color: 'red',
                         }
                     }
                 },
@@ -349,8 +380,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     label: `Games released in ${getMonthName(month)} over the years`,
                     data: values,
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(255, 0, 0, 1)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
                     borderWidth: 1,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: 'rgba(255, 99, 0, 1)',
+                    pointBorderColor: 'rgba(255, 99, 0, 1)',
                     fill: false,
                     tension: 0.1
                 }]
@@ -359,22 +395,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const options = {
                 responsive: true,
                 maintainAspectRatio: false,
+                color: 'red',
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
                             stepSize: 1,
+                            color: 'red',
                             callback: function (value) { return value; }
                         },
                         title: {
                             display: true,
+                            color: 'red',
                             text: 'Count'
-                        }
+                        },
                     },
                     x: {
                         title: {
                             display: true,
+                            color: 'red',
                             text: 'Year'
+                        },
+                        ticks: {
+                            color: 'red',
                         }
                     }
                 },
@@ -427,13 +470,13 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Positive Ratio',
                 data: positiveRatios,
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(255, 0, 0, 1)',
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
                 borderWidth: 1,
                 pointRadius: 3,
                 pointHoverRadius: 5,
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                pointBorderColor: 'rgba(54, 162, 235, 1)',
+                pointBackgroundColor: 'rgba(255, 99, 0, 1)',
+                pointBorderColor: 'rgba(255, 99, 0, 1)',
                 fill: false,
                 tension: 0.1
             }]
@@ -442,21 +485,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const options = {
             responsive: true,
             maintainAspectRatio: false,
+            color: 'red',
             scales: {
                 y: {
                     beginAtZero: true,
                     max: 100,
                     title: {
                         display: true,
+                        color: 'red',
                         text: 'Positive Ratio (%)'
+                    },
+                    ticks: {
+                        color: 'red',
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'User Reviews'
+                        text: 'User Reviews',
+                        color: 'red',
                     },
                     ticks: {
+                        color: 'red',
                         maxTicks: 50
                     }
                 }
@@ -509,13 +559,13 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Average Price',
                 data: prices,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 0, 0, 1)',
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
                 borderWidth: 1,
                 pointRadius: 3,
                 pointHoverRadius: 5,
-                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-                pointBorderColor: 'rgba(255, 99, 132, 1)',
+                pointBackgroundColor: 'rgba(255, 99, 0, 1)',
+                pointBorderColor: 'rgba(255, 99, 0, 1)',
                 fill: false,
                 tension: 0.1
             }]
@@ -526,21 +576,27 @@ document.addEventListener('DOMContentLoaded', () => {
             maintainAspectRatio: false,
             scales: {
                 y: {
+                    color: 'red',
                     beginAtZero: true,
                     title: {
+                        color: 'red',
                         display: true,
                         text: 'Average Price'
                     },
                     ticks: {
+                        color: 'red',
                         maxTicks: priceUsersThreshold
                     }
                 },
                 x: {
+                    color: 'red',
                     title: {
+                        color: 'red',
                         display: true,
                         text: 'User Reviews'
                     },
                     ticks: {
+                        color: 'red',
                         maxTicks: 50
                     }
                 }
@@ -663,7 +719,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showPopup(`Top games in ${label}: ${topGames}`);
         }
     }
-
 
     function displayGameDetailsByDate(filteredDates, year, month, day = null) {
         let selectedGames = filteredDates.filter(item => {

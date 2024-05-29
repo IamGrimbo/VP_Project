@@ -478,19 +478,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    function generatePriceChart(data, priceUsersThreshold = 1000, usersPriceThreshold = 1000000) {
-        // Filter data based on priceUsersThreshold
+    function generatePriceChart(data, priceUsersThreshold = 100, usersPriceThreshold = 1000000) {
         const filteredData = data.filter(game => game.price_original <= priceUsersThreshold);
     
-        // Calculate the increment for x-axis points
         const increment = usersPriceThreshold / 50;
         const xAxisPoints = [];
         for (let i = 0; i <= usersPriceThreshold; i += increment) {
             xAxisPoints.push(i);
         }
     
-        // Calculate average prices for each range and store games at each point
         const prices = [];
+        const filteredXAxisPoints = [];
         const gamesAtPoints = {};
         xAxisPoints.forEach(point => {
             const lowerBound = point - (increment * 0.5);
@@ -500,16 +498,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (gamesInRange.length > 0) {
                 const averagePrice = gamesInRange.reduce((sum, game) => sum + game.price_original, 0) / gamesInRange.length;
                 prices.push(averagePrice);
-                gamesAtPoints[point] = gamesInRange.slice(0, 3); // Store up to three games for each point
-            } else {
-                prices.push(null); // To maintain the alignment of data points
+                filteredXAxisPoints.push(point);
+                gamesAtPoints[point] = gamesInRange.slice(0, 3);
             }
         });
     
-        // Chart configuration
         const ctx = document.getElementById('chartCanvas').getContext('2d');
         const chartData = {
-            labels: xAxisPoints,
+            labels: filteredXAxisPoints,
             datasets: [{
                 label: 'Average Price',
                 data: prices,
@@ -534,6 +530,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     title: {
                         display: true,
                         text: 'Average Price'
+                    },
+                    ticks: {
+                        maxTicks: priceUsersThreshold
                     }
                 },
                 x: {
@@ -549,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
             onClick: (event, elements) => {
                 if (elements.length > 0) {
                     const index = elements[0].index;
-                    const clickedPoint = xAxisPoints[index];
+                    const clickedPoint = filteredXAxisPoints[index];
                     const games = gamesAtPoints[clickedPoint] || [];
                     displayGameDetailsByUsers(games);
                 }
@@ -566,6 +565,37 @@ document.addEventListener('DOMContentLoaded', () => {
             options: options
         });
     }
+    
+    function displayGameDetailsByUsers(games) {
+        if (games.length > 0) {
+            const gameTitles = games.map(game => game.title).join(', ');
+            showPopup(`Top games at clicked user review point: ${gameTitles}`);
+        } else {
+            showPopup('No games available at clicked user review point.');
+        }
+    }
+    
+    function showPopup(message) {
+        const popup = document.getElementById('customPopup');
+        const popupMessage = document.getElementById('popupMessage');
+        popupMessage.textContent = message;
+        popup.style.display = 'block';
+    
+        function closePopup(event) {
+            if (!popup.contains(event.target)) {
+                popup.style.display = 'none';
+                document.removeEventListener('click', closePopup);
+            }
+        }
+    
+        document.addEventListener('click', closePopup);
+    
+        popup.addEventListener('blur', () => {
+            popup.style.display = 'none';
+        });
+    
+        popup.focus();
+    }    
     
     function displayGameDetailsByUsers(games) {
         if (games.length > 0) {

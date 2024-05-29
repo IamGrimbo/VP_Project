@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         let counts = countOccurrences(items);
 
-        const threshold = type === 'genres' ? 100 : type === 'tags' ? 500 : 140;
+        const threshold = type === 'genres' ? 100 : type === 'tags' ? 1500 : 140;
         let filteredCounts = {};
         let othersCount = 0;
         let othersItems = [];
@@ -390,10 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let combinedGames = games.concat(otherGames);
             let topGames = combinedGames.slice(0, 3).join(', ');
-            alert(`Top games in Others (${othersItems.join(', ')}): ${topGames}`);
+            showPopup(`Top games in Others (${othersItems.join(', ')}): ${topGames}`);
         } else {
             let topGames = games.slice(0, 3).join(', ');
-            alert(`Top games in ${label}: ${topGames}`);
+            showPopup(`Top games in ${label}: ${topGames}`);
         }
     }
 
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedGames.length > 0) {
             const gameTitles = selectedGames.slice(0, 3).map(game => game.title).join(', ');
             const dateString = day ? `${day}-${month}-${year}` : `${getMonthName(month)}-${year}`;
-            alert(`Top games released on ${dateString}: ${gameTitles}`);
+            showPopup(`Top games released on ${dateString}: ${gameTitles}`);
         } else {
             alert('No games released on selected date.');
         }
@@ -422,5 +422,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const date = new Date();
         date.setMonth(monthNumber - 1);
         return date.toLocaleString('default', { month: 'long' });
+    }
+
+    function showPopup(message) {
+        const popup = document.getElementById('customPopup');
+        const popupMessage = document.getElementById('popupMessage');
+        popupMessage.textContent = message;
+        popup.style.display = 'block';
+    
+        function closePopup(event) {
+            if (!popup.contains(event.target)) {
+                popup.style.display = 'none';
+                document.removeEventListener('click', closePopup);
+            }
+        }
+    
+        document.addEventListener('click', closePopup);
+    
+        popup.addEventListener('blur', () => {
+            popup.style.display = 'none';
+        });
+    
+        popup.focus();
     }
 });

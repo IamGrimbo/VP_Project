@@ -170,6 +170,9 @@ function renderGrid(games, append = true, applySorting = true, renderMode = "") 
         ratingDiv.append("div").attr("class", `rating ${ratingClass}`).text(game.rating);
         ratingDiv.append("div").attr("class", "user-reviews").text(`| ${game.user_reviews} User Reviews`);
 
+        // Render rating tooltip
+        renderRatingTooltip(ratingDiv.node(), game);
+
         // Add price, discount percentage, and add to cart button
         const gameInfo = gameDetails.append("div").attr("class", "game-info");
 
@@ -194,6 +197,24 @@ function renderGrid(games, append = true, applySorting = true, renderMode = "") 
         }
 
         gameInfo.append("button").attr("class", "add-to-cart").text("Add to Cart");
+    });
+}
+
+// Function to render rating tooltip
+function renderRatingTooltip(ratingDiv, game) {
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('rating-tooltip');
+    tooltip.textContent = `${game.positive_ratio}% of the ${game.user_reviews} for this game are positive`;
+    ratingDiv.appendChild(tooltip);
+
+    // Show tooltip on hover
+    ratingDiv.addEventListener('mouseenter', () => {
+        tooltip.style.display = 'block';
+    });
+
+    // Hide tooltip on mouse leave
+    ratingDiv.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
     });
 }
 

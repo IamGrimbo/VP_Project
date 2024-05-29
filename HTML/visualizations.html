@@ -71,8 +71,14 @@
         </div>
     </div>
 
+    <!-- Popup HTML -->
+    <div class="custom-popup" id="customPopup" style="display: none;">
+        <div class="popup-content">
+            <p id="popupMessage"></p>
+        </div>
+    </div>
+
     <script>
-        // JavaScript to import topbar.html into topbar-container div
         fetch('../HTML/topbar.html')
             .then(response => response.text())
             .then(html => {

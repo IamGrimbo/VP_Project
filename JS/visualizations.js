@@ -74,15 +74,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const chartTypeContainer = document.getElementById('chartTypeContainer');
         const yearContainer = document.getElementById('yearContainer');
         const monthContainer = document.getElementById('monthContainer');
+        const userReviewsContainer = document.getElementById('userReviewsContainer');
+        const priceUsersContainer = document.getElementById('priceUsersContainer');
+        const usersPriceContainer = document.getElementById('usersPriceContainer');
 
         if (visualizationType === 'release_dates') {
             chartTypeContainer.style.display = 'none';
             yearContainer.style.display = 'block';
             monthContainer.style.display = 'block';
+            userReviewsContainer.style.display = 'none';
+            priceUsersContainer.style.display = 'none';
+            usersPriceContainer.style.display = 'none';
+
+        } else if (visualizationType === 'user_reviews_positive_ratio') {
+            chartTypeContainer.style.display = 'none';
+            yearContainer.style.display = 'none';
+            monthContainer.style.display = 'none';
+            userReviewsContainer.style.display = 'block';
+            priceUsersContainer.style.display = 'none';
+            usersPriceContainer.style.display = 'none';
+
+        } else if (visualizationType === 'user_reviews_price') {
+            chartTypeContainer.style.display = 'none';
+            yearContainer.style.display = 'none';
+            monthContainer.style.display = 'none';
+            userReviewsContainer.style.display = 'none';
+            priceUsersContainer.style.display = 'block';
+            usersPriceContainer.style.display = 'block';
+
         } else {
             chartTypeContainer.style.display = 'block';
             yearContainer.style.display = 'none';
             monthContainer.style.display = 'none';
+            userReviewsContainer.style.display = 'none';
+            priceUsersContainer.style.display = 'none';
+            usersPriceContainer.style.display = 'none';
         }
     }
 
@@ -91,6 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const chartType = document.getElementById('chartType').value;
         const year = document.getElementById('year').value;
         const month = document.getElementById('month').value;
+        const userReviewsThreshold = parseInt(document.getElementById('reviewThreshold').value);
+        const priceUsersThreshold = parseInt(document.getElementById('priceUsersThreshold').value);
+        const usersPriceThreshold = parseInt(document.getElementById('usersPriceThreshold').value);
 
         if (visualizationType === 'release_dates' && !year && !month) {
             alert('Please select at least one of year or month.');
@@ -104,6 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (visualizationType === 'release_dates') {
                 generateReleaseDateChart(data, year, month);
+            } else if (visualizationType === 'user_reviews_positive_ratio') {
+                generateUserReviewsPositiveRatioChart(data, userReviewsThreshold);
+            } else if (visualizationType === 'user_reviews_price') {
+                generatePriceChart(data, priceUsersThreshold, usersPriceThreshold);
             } else {
                 const { labels, values, othersItems } = processData(data, visualizationType);
 
@@ -361,6 +394,210 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function generateUserReviewsPositiveRatioChart(data, userReviewsThreshold = 1000000) {
+        let filteredData;
+        filteredData = data.filter(game => game.user_reviews <= userReviewsThreshold);
+        const increment = userReviewsThreshold * 0.02;
+        const xAxisPoints = [];
+        for (let i = 0; i <= userReviewsThreshold; i += increment) {
+            xAxisPoints.push(i);
+        }
+    
+        const userReviews = [];
+        const positiveRatios = [];
+        const gamesAtPoints = {};
+    
+        xAxisPoints.forEach(point => {
+            let lowerBound, upperBound;
+            lowerBound = point - (increment * 0.01);
+            upperBound = point + (increment * 0.01);
+    
+            const gamesInRange = filteredData.filter(game => game.user_reviews >= lowerBound && game.user_reviews <= upperBound);
+            if (gamesInRange.length > 0) {
+                const averagePositiveRatio = gamesInRange.reduce((sum, game) => sum + game.positive_ratio, 0) / gamesInRange.length;
+                userReviews.push(point);
+                positiveRatios.push(averagePositiveRatio);
+                gamesAtPoints[point] = gamesInRange.slice(0, 3);
+            }
+        });
+    
+        const ctx = document.getElementById('chartCanvas').getContext('2d');
+        const chartData = {
+            labels: userReviews,
+            datasets: [{
+                label: 'Positive Ratio',
+                data: positiveRatios,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 1,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                pointBorderColor: 'rgba(54, 162, 235, 1)',
+                fill: false,
+                tension: 0.1
+            }]
+        };
+    
+        const options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Positive Ratio (%)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'User Reviews'
+                    },
+                    ticks: {
+                        maxTicks: 50
+                    }
+                }
+            },
+            onClick: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const clickedPoint = userReviews[index];
+                    const games = gamesAtPoints[clickedPoint] || [];
+                    displayGameDetailsByUsers(games);
+                }
+            }
+        };
+    
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: options
+        });
+    }
+    
+    function generatePriceChart(data, priceUsersThreshold = 1000, usersPriceThreshold = 1000000) {
+        // Filter data based on priceUsersThreshold
+        const filteredData = data.filter(game => game.price_original <= priceUsersThreshold);
+    
+        // Calculate the increment for x-axis points
+        const increment = usersPriceThreshold / 50;
+        const xAxisPoints = [];
+        for (let i = 0; i <= usersPriceThreshold; i += increment) {
+            xAxisPoints.push(i);
+        }
+    
+        // Calculate average prices for each range and store games at each point
+        const prices = [];
+        const gamesAtPoints = {};
+        xAxisPoints.forEach(point => {
+            const lowerBound = point - (increment * 0.5);
+            const upperBound = point + (increment * 0.5);
+    
+            const gamesInRange = filteredData.filter(game => game.user_reviews >= lowerBound && game.user_reviews <= upperBound);
+            if (gamesInRange.length > 0) {
+                const averagePrice = gamesInRange.reduce((sum, game) => sum + game.price_original, 0) / gamesInRange.length;
+                prices.push(averagePrice);
+                gamesAtPoints[point] = gamesInRange.slice(0, 3); // Store up to three games for each point
+            } else {
+                prices.push(null); // To maintain the alignment of data points
+            }
+        });
+    
+        // Chart configuration
+        const ctx = document.getElementById('chartCanvas').getContext('2d');
+        const chartData = {
+            labels: xAxisPoints,
+            datasets: [{
+                label: 'Average Price',
+                data: prices,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 1,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                pointBorderColor: 'rgba(255, 99, 132, 1)',
+                fill: false,
+                tension: 0.1
+            }]
+        };
+    
+        const options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Average Price'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'User Reviews'
+                    },
+                    ticks: {
+                        maxTicks: 50
+                    }
+                }
+            },
+            onClick: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const clickedPoint = xAxisPoints[index];
+                    const games = gamesAtPoints[clickedPoint] || [];
+                    displayGameDetailsByUsers(games);
+                }
+            }
+        };
+    
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+    
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: options
+        });
+    }
+    
+    function displayGameDetailsByUsers(games) {
+        if (games.length > 0) {
+            const gameTitles = games.map(game => game.title).join(', ');
+            showPopup(`Top games at clicked user review point: ${gameTitles}`);
+        } else {
+            showPopup('No games available at clicked user review point.');
+        }
+    }
+    
+    function showPopup(message) {
+        const popup = document.getElementById('customPopup');
+        const popupMessage = document.getElementById('popupMessage');
+        popupMessage.textContent = message;
+        popup.style.display = 'block';
+    
+        function closePopup(event) {
+            if (!popup.contains(event.target)) {
+                popup.style.display = 'none';
+                document.removeEventListener('click', closePopup);
+            }
+        }
+    
+        document.addEventListener('click', closePopup);
+    
+        popup.addEventListener('blur', () => {
+            popup.style.display = 'none';
+        });
+    
+        popup.focus();
+    }    
+    
     function displayGameDetails(label, data, visualizationType, othersItems) {
         let games = [];
         data.forEach(game => {
@@ -375,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (label === 'Mac' && game.mac === "True") games.push(game.title);
                 if (label === 'Linux' && game.linux === "True") games.push(game.title);
                 if (label === 'Steam Deck' && game.steam_deck === "True") games.push(game.title);
-            }
+            } 
         });
 
         if (label === 'Others') {
@@ -396,6 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showPopup(`Top games in ${label}: ${topGames}`);
         }
     }
+
 
     function displayGameDetailsByDate(filteredDates, year, month, day = null) {
         let selectedGames = filteredDates.filter(item => {
@@ -422,6 +660,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const date = new Date();
         date.setMonth(monthNumber - 1);
         return date.toLocaleString('default', { month: 'long' });
+    }
+
+    function displayGameDetailsByUsers(games) {
+        if (games.length > 0) {
+            const gameTitles = games.map(game => game.title).join(', ');
+            showPopup(`Top games at clicked point: ${gameTitles}`);
+        } else {
+            showPopup('No games available at clicked point.');
+        }
     }
 
     function showPopup(message) {
